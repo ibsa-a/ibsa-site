@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Ibsa Abadiga: Computer Engineering & CS at USC. Embedded systems, FPGAs and PCBs.">
+<title>Ibsa Abadiga</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;1,7..72,400&family=JetBrains+Mono:wght@400;500&family=Nanum+Pen+Script&display=swap">
+<style>
+/* Layout: a circuit board read top-down — silkscreen header with live scope, a letter, a dated timeline, project cards placed as parts (J1…), BOM, then a contact pad */
+:root{
+  --bg:#f1f2ec; --surface:#ffffff; --sunk:#e6e9e0; --fg:#141d17; --muted:#5d685f; --line:#d4d9cd;
+  --copper:#b25a22; --copper-soft:#f3e3d6; --trace:#2c6a48;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Literata",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --hand:"Nanum Pen Script","Segoe Print",cursive;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b130e;--surface:#111c15;--sunk:#0e1812;--fg:#e6ece5;--muted:#8d9b90;--line:#213229;--copper:#e8975c;--copper-soft:#2a1d13;--trace:#62c290;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b130e;--surface:#111c15;--sunk:#0e1812;--fg:#e6ece5;--muted:#8d9b90;--line:#213229;--copper:#e8975c;--copper-soft:#2a1d13;--trace:#62c290;color-scheme:dark}
+*{box-sizing:border-box}
+html{color-scheme:light}body{margin:0}
+@media (prefers-color-scheme:dark){html{color-scheme:dark}}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.7;
+  background-image:radial-gradient(color-mix(in srgb,var(--line) 70%,transparent) 1px,transparent 1.3px);background-size:24px 24px;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+::selection{background:var(--copper);color:var(--bg)}
+.wrap{max-width:760px;margin:0 auto;padding-block:40px 72px;display:flex;flex-direction:column;gap:72px}
+a{color:inherit}
+
+/* top nav */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.top nav{display:flex;gap:18px;flex-wrap:wrap}
+.top nav a{text-decoration:none}
+.top nav a:hover{color:var(--copper)}
+.mono-logo{font-family:var(--display);font-weight:800;font-size:18px;color:var(--fg);letter-spacing:-.04em;text-decoration:none;border:2px solid var(--fg);border-radius:6px;padding:0 6px;line-height:26px}
+
+/* hero */
+.hero{display:flex;flex-direction:column;gap:22px}
+.pill{display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%;font-family:var(--mono);font-size:12px;padding:5px 12px 5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted)}
+.pill b{color:var(--fg);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--trace);box-shadow:0 0 0 0 var(--trace);animation:pulse 2s infinite;flex:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--trace) 60%,transparent)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,12vw,5.6rem);line-height:.9;margin:0;letter-spacing:-.045em}
+h1 .amp{color:var(--copper)}
+.lede{font-size:clamp(1.1rem,2.6vw,1.3rem);line-height:1.5;margin:0;max-width:34ch;color:var(--fg);text-wrap:balance}
+.lede em{font-style:italic;color:var(--copper)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meta span::before{content:"◦ ";color:var(--copper)}
+
+/* scope */
+.scope{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden;box-shadow:0 1px 0 var(--line),0 12px 30px -18px rgba(20,40,25,.25)}
+.scope-top{display:flex;justify-content:space-between;gap:12px;padding:6px 12px;font-family:var(--mono);font-size:11px;color:var(--muted);border-bottom:1px solid var(--line);background:var(--sunk);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.scope-top b{color:var(--copper);font-weight:500}
+.leds{display:flex;gap:5px;align-items:center}
+.leds i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.leds i:first-child{background:var(--trace)}
+canvas{display:block;width:100%;height:42px}
+
+/* section heads */
+section{display:flex;flex-direction:column;gap:20px;scroll-margin-top:24px}
+h2{font-family:var(--mono);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:0;display:flex;align-items:center;gap:12px}
+h2::before{content:"";width:9px;height:9px;border:2px solid var(--copper);border-radius:50%;flex:none}
+h2::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,color-mix(in srgb,var(--trace) 55%,transparent),transparent)}
+
+/* letter */
+.letter{display:flex;flex-direction:column;gap:16px;max-width:62ch}
+.letter p{margin:0}
+.letter .hey{font-family:var(--display);font-weight:600;font-size:1.5rem;letter-spacing:-.01em}
+.sig{font-family:var(--hand);font-size:38px;line-height:1;color:var(--copper);transform:rotate(-4deg);transform-origin:left;width:max-content;margin-top:4px}
+
+/* timeline */
+.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;position:relative}
+.tl::before{content:"";position:absolute;left:111px;top:14px;bottom:14px;width:2px;background:var(--line)}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:30px;padding-block:14px;position:relative}
+.tl li::after{content:"";position:absolute;left:106px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--trace)}
+.tl li.now::after{background:var(--trace)}
+.tl .when{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:4px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl .txt{min-width:0;display:flex;flex-direction:column;gap:2px}
+.t{font-family:var(--display);font-weight:600;font-size:19px;line-height:1.3;margin:0}
+.t a{text-decoration:none;border-bottom:1px solid var(--line)}
+.t a:hover{border-color:var(--copper);color:var(--copper)}
+.r{font-family:var(--mono);font-size:12px;color:var(--copper)}
+.d{font-size:15px;color:var(--muted);margin:4px 0 0;line-height:1.6}
+.d b{color:var(--fg);font-weight:600}
+
+/* project cards */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:10px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);border-color:var(--copper);box-shadow:0 14px 30px -20px color-mix(in srgb,var(--copper) 70%,transparent)}
+.card::before,.card::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--line);top:10px}
+.card::before{left:10px}.card::after{right:10px}
+.card:hover::before,.card:hover::after{border-color:var(--copper)}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-top:6px}
+.des{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--copper);background:var(--copper-soft);padding:2px 7px;border-radius:4px}
+.yr{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.card .t{font-size:21px}
+.card .d{margin:0;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0;padding:0;list-style:none}
+.tags li{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+.card.wide{grid-column:1/-1}
+
+/* BOM */
+.bom{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.bom div{display:flex;flex-direction:column;gap:8px;min-width:0}
+.bom h3{margin:0;font-family:var(--display);font-weight:600;font-size:15px}
+.bom ul{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.bom li{font-family:var(--mono);font-size:12px;padding:3px 9px;border:1px solid var(--line);border-radius:5px;background:var(--surface)}
+
+/* contact */
+.contact{background:var(--fg);color:var(--bg);border-radius:16px;padding:32px 28px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+.contact::after{content:"";position:absolute;inset:0;background-image:radial-gradient(color-mix(in srgb,var(--bg) 14%,transparent) 1px,transparent 1.3px);background-size:24px 24px;pointer-events:none}
+.contact > *{position:relative;z-index:1}
+.contact h2{color:color-mix(in srgb,var(--bg) 65%,var(--fg))}
+.contact h2::after{background:linear-gradient(90deg,color-mix(in srgb,var(--bg) 30%,transparent),transparent)}
+.contact p{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,4.4vw,2.1rem);line-height:1.2;letter-spacing:-.02em;max-width:24ch;text-wrap:balance}
+.links{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{font-family:var(--mono);font-size:13px;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;border:1px solid color-mix(in srgb,var(--bg) 30%,transparent);color:var(--bg);background:transparent;text-decoration:none;cursor:pointer}
+.btn:hover,.btn:focus-visible{background:var(--bg);color:var(--fg);outline:none}
+.btn.primary{background:var(--copper);border-color:var(--copper);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);background:var(--copper);color:#fff}
+#mail{user-select:all}
+
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:-40px}
+
+a:focus-visible,button:focus-visible{outline:2px solid var(--copper);outline-offset:3px;border-radius:4px}
+
+/* load-in: starts visible, only nudges */
+@keyframes rise{from{transform:translateY(8px)}to{transform:none}}
+.wrap > *{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+.wrap > *:nth-child(2){animation-delay:.05s}.wrap > *:nth-child(3){animation-delay:.1s}.wrap > *:nth-child(4){animation-delay:.15s}
+
+@media (max-width:600px){
+  .wrap{gap:56px;padding-block:24px 56px}
+  .top nav{display:none}
+  .cards,.bom{grid-template-columns:minmax(0,1fr)}
+  .tl::before{left:5px}
+  .tl li{grid-template-columns:minmax(0,1fr);gap:2px;padding-left:28px}
+  .tl li::after{left:0;top:18px}
+  .tl .when{text-align:left;padding-top:0}
+  .contact{padding:26px 20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="top">
+    <a class="mono-logo" href="#top" aria-label="Ibsa Abadiga">IA</a>
+    <nav><a href="#about">about</a><a href="#work">experience</a><a href="#school">education</a><a href="#projects">projects</a><a href="#contact">contact</a></nav>
+  </div>
+
+  <div class="hero" id="top">
+    <span class="pill"><span class="dot"></span>Now: <b>building Artemis</b> at Makers USC</span>
+    <h1>Ibsa<br>Abadiga</h1>
+    <p class="lede">I build where hardware meets software: FPGAs, circuit boards, and the firmware that makes them <em>turn on</em>.</p>
+    <div class="meta"><span>Computer Engineering &amp; CS, USC ’28</span><span>Takoma Park, MD → Los Angeles</span></div>
+    <div class="scope" aria-hidden="true">
+      <div class="scope-top"><span class="leds"><i></i><i></i><i></i>&nbsp; CH0 CLK · CH1 X:<b id="x">0</b> · CH2 Y:<b id="y">0</b></span><span id="clock">--:--:-- PT</span></div>
+      <canvas id="la"></canvas>
+    </div>
+  </div>
+
+  <section id="about">
+    <h2>About</h2>
+    <div class="letter">
+      <p class="hey">Hey, I'm Ibsa.</p>
+      <p>My favorite moment in engineering is the first time something I built actually turns on. An LED blinks, a motor spins, a ball bounces across a screen on an FPGA I wrote in Verilog. I chase that feeling a lot.</p>
+      <p>These days it's Project Artemis at Makers USC, a device that helps you aim a bow and arrow by giving you visual or audio cues. We're still deciding which works better. Before that I wrote firmware and designed the board for Hydro, a little robot that brings snacks and water to your airplane seat. I also spent a year building AI demos with Google and USC PhD researchers, including an LED setup you can boss around with Siri.</p>
+      <p>I've also soldered my own guitar circuit (it works, and it's loud), and spent 36 sleepless hours at a hackathon building a wearable that tells blind users what's in front of them. I'd love to keep building things that help people.</p>
+      <p>I grew up in Takoma Park, Maryland, and my family is originally from Jimma, Ethiopia. When I'm not at a workbench, I'm playing soccer with friends or hunting down a food I haven't tried yet. Send me your favorite spot.</p>
+      <p>I do all this while working about 15 hours a week, so if you see me on campus, I'm probably walking fast.</p>
+      <p class="sig">Ibsa</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <h2>Experience</h2>
+    <ol class="tl">
+      <li class="now"><span class="when">2026 – now</span><div class="txt"><p class="t">Makers USC</p><span class="r">Embedded Software Engineer</span><p class="d"><b>Project Artemis</b> (now): an aim-assist device that guides archers with visual or audio cues.<br><b>Hydro</b>: firmware, PCB, and the routing that turns a seat request into robot motion for an in-flight delivery bot.</p></div></li>
+      <li><span class="when">2024 – 2025</span><div class="txt"><p class="t">Google</p><span class="r">AI &amp; Embedded Systems Research Intern</span><p class="d">Arduino computer-vision demos with USC PhD researchers, a Siri-controlled LED system shown at NSBE, and $140K in program funding.</p></div></li>
+    </ol>
+  </section>
+
+  <section id="school">
+    <h2>Education</h2>
+    <ol class="tl">
+      <li class="now"><span class="when">2024 – 2028</span><div class="txt"><p class="t"><a href="https://viterbischool.usc.edu/" target="_blank" rel="noopener">USC Viterbi</a></p><span class="r">B.S. Computer Engineering &amp; Computer Science</span><p class="d">McCarthy Honors College. Computer architecture, digital design, VLSI, SoC and embedded systems.</p></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Leadership</h2>
+    <ol class="tl">
+      <li class="now"><span class="when">2025 – now</span><div class="txt"><p class="t"><a href="https://mlt.org/" target="_blank" rel="noopener">Management Leadership for Tomorrow</a></p><span class="r">Career Prep Fellow</span><p class="d">An 18-month program of coaching, mentorship and skill-building.</p></div></li>
+    </ol>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="cards">
+      <article class="card wide"><div class="card-head"><span class="des">J1</span><span class="yr">StarkHacks @ Purdue · 2026</span></div><h3 class="t">ARIA</h3><p class="d">A chest-worn guide that spots obstacles and says them out loud for visually impaired users. Camera, sensors and headphones wired to an Arduino Uno Q in 36 hours.</p><ul class="tags"><li>C++</li><li>YOLOv8-nano</li><li>ElevenLabs TTS</li><li>Arduino Uno Q</li></ul></article>
+      <article class="card"><div class="card-head"><span class="des">J2</span><span class="yr">2026</span></div><h3 class="t">FPGA Breakout</h3><p class="d">Classic Breakout, but every bounce is hardware I wrote in Verilog.</p><ul class="tags"><li>Verilog</li><li>Vivado</li><li>Nexys A7</li><li>VGA</li></ul></article>
+      <article class="card"><div class="card-head"><span class="des">J3</span><span class="yr">2026</span></div><h3 class="t">Electric guitar</h3><p class="d">I designed the board, hand-soldered every part, and debugged my own bad joints until it sang.</p><ul class="tags"><li>PCB design</li><li>Op-amp filter</li><li>Soldering</li></ul></article>
+      <article class="card wide"><div class="card-head"><span class="des">J4</span><span class="yr">2025</span></div><h3 class="t">Optical speedometer</h3><p class="d">Clocks how fast something flies past two light beams, then shows it on an LCD and swings a servo needle.</p><ul class="tags"><li>ATmega328P</li><li>ISRs</li><li>PWM</li><li>Embedded C</li></ul></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Bill of materials</h2>
+    <div class="bom">
+      <div><h3>Hardware</h3><ul><li>Verilog</li><li>SystemVerilog</li><li>FPGA</li><li>ASIC / RTL</li><li>PCB design</li></ul></div>
+      <div><h3>Tools</h3><ul><li>Vivado</li><li>QuestaSim</li><li>Cadence Virtuoso</li><li>Altium</li><li>KiCad</li><li>LTspice</li></ul></div>
+      <div><h3>Software</h3><ul><li>C/C++</li><li>Python</li><li>Java</li><li>Swift</li><li>Arduino</li><li>Raspberry Pi</li></ul></div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <h2>Contact</h2>
+    <p>Building something with hardware in it? I'd love to hear about it.</p>
+    <div class="links">
+      <button class="btn primary" id="cp" type="button"><span id="mail">ibsa.abadiga@gmail.com</span><span id="cpl">copy</span></button>
+      <a class="btn" href="https://www.linkedin.com/in/ibsa-abadiga/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </section>
+
+  <footer><span>© 2026 Ibsa Abadiga</span><span>Designed and soldered in Los Angeles</span></footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=new Intl.DateTimeFormat('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'America/Los_Angeles'});
+const tick=()=>$('clock').textContent=fmt.format(new Date())+' PT';tick();setInterval(tick,1000);
+
+$('cp').addEventListener('click',()=>{
+  const t=$('mail').textContent;
+  const done=()=>{$('cpl').textContent='copied ✓';setTimeout(()=>$('cpl').textContent='copy',1600)};
+  const sel=()=>{const r=document.createRange();r.selectNodeContents($('mail'));const s=getSelection();s.removeAllRanges();s.addRange(r)};
+  try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
+});
+
+// logic analyzer: CH0 steady clock; CH1/CH2 toggle as the cursor crosses 40px grid lines (idle wander when untouched)
+const cv=$('la'),ctx=cv.getContext('2d');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const STEP=3;let W,H,N=0,ch=[[],[],[]],b1=0,b2=0,touched=false,t=0;
+function size(){const dpr=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);N=Math.ceil((W-34)/STEP)+1;
+  ch=ch.map(a=>{a=a.slice(-N);while(a.length<N)a.unshift(0);return a})}
+addEventListener('resize',size);size();
+addEventListener('pointermove',e=>{touched=true;$('x').textContent=Math.round(e.clientX);$('y').textContent=Math.round(e.clientY);
+  b1=Math.floor(e.clientX/40)%2;b2=Math.floor(e.clientY/40)%2});
+function step(){t++;
+  if(!touched){if(t%23===0)b1^=1;if(t%37===0)b2^=1}
+  [Math.floor(t/7)%2,b1,b2].forEach((v,i)=>{ch[i].push(v);if(ch[i].length>N)ch[i].shift()})}
+function draw(){
+  const css=getComputedStyle(document.documentElement);
+  const cols=[css.getPropertyValue('--muted').trim(),css.getPropertyValue('--trace').trim(),css.getPropertyValue('--copper').trim()];
+  const line=css.getPropertyValue('--line').trim();
+  ctx.clearRect(0,0,W,H);
+  const lane=H/3,x0=34;
+  ctx.strokeStyle=line;ctx.lineWidth=1;ctx.setLineDash([2,4]);
+  for(let i=1;i<3;i++){ctx.beginPath();ctx.moveTo(0,i*lane);ctx.lineTo(W,i*lane);ctx.stroke()}
+  ctx.setLineDash([]);
+  ctx.font='8px "JetBrains Mono",monospace';ctx.textBaseline='middle';
+  ['CLK','X','Y'].forEach((l,i)=>{ctx.fillStyle=cols[i];ctx.fillText(l,8,i*lane+lane/2)});
+  ch.forEach((a,i)=>{
+    const hi=i*lane+lane*.2,lo=i*lane+lane*.8;
+    ctx.strokeStyle=cols[i];ctx.lineWidth=1.25;ctx.lineJoin='round';ctx.beginPath();
+    let prev=null;
+    a.forEach((v,j)=>{const x=x0+j*STEP,y=v?hi:lo;if(prev===null)ctx.moveTo(x,y);else{if(prev!==y)ctx.lineTo(x,prev);ctx.lineTo(x,y)}prev=y});
+    ctx.stroke();
+  });
+}
+for(let k=0;k<N;k++)step();
+draw();
+if(!reduce){(function loop(){step();draw();requestAnimationFrame(loop)})()}
+</script>
+
+</body>
+</html>
